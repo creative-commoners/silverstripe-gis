@@ -2,6 +2,7 @@
 
 namespace Smindel\GIS\ORM\FieldType;
 
+use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBComposite;
@@ -50,7 +51,7 @@ class DBGeography extends DBComposite
             list($wkt) = GIS::split_ewkt(GIS::array_to_ewkt(GIS::reproject_array(GIS::ewkt_to_array($value), 4326)));
         }
 
-        return ['ST_GeogFromText(?)' => [$wkt]];
+        return sprintf('ST_GeogFromText(%s)', Convert::raw2sql($wkt));
     }
 
     public function exists()

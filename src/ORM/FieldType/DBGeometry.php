@@ -2,6 +2,7 @@
 
 namespace Smindel\GIS\ORM\FieldType;
 
+use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DB;
 use Smindel\GIS\GIS;
 
@@ -45,6 +46,10 @@ class DBGeometry extends DBGeography
 
         list($wkt, $srid) = GIS::split_ewkt($value);
 
-        return ['ST_GeomFromText(?, ?)' => [$wkt, $srid]];
+        return sprintf(
+            'ST_GeomFromText(%s, %s)',
+            Convert::raw2sql($wkt),
+            Convert::raw2sql($srid)
+        );
     }
 }
